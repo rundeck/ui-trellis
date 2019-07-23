@@ -103,7 +103,6 @@ import Vue from 'vue'
 
 import AceEditor from '../utils/AceEditor.vue'
 import Expandable from '../utils/Expandable.vue'
-// import JobConfigPicker from './JobConfigPicker.vue'
 import PluginInfo from './PluginInfo.vue'
 import PluginValidation from '../../interfaces/PluginValidation'
 import PluginPropView from './pluginPropView.vue'
@@ -125,7 +124,6 @@ export default Vue.extend({
   components: {
     Expandable,
     AceEditor,
-    // JobConfigPicker,
     PluginInfo,
     PluginPropView,
     PluginPropEdit
@@ -362,7 +360,6 @@ export default Vue.extend({
       return convertArrayInput(cleanConfigInput(this.exportInputs()))
     }
   },
-
   beforeMount () {
     this.loadForMode()
   }

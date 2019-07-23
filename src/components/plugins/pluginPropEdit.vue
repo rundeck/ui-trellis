@@ -134,6 +134,17 @@
           >{{prop.staticTextDefaultValue}}</span>
           <span v-else>{{prop.staticTextDefaultValue}}</span>
         </template>
+        <template v-else-if="prop.options && prop.options['displayType']==='RUNDECK_JOB'">
+          <input
+            :name="`${rkey}prop_`+pindex"
+            :id="`${rkey}prop_`+pindex"
+            readonly
+            size="100"
+            class="form-control input-sm"
+            v-bind:title="currentValue"
+            v-bind:value="jobName"
+          >
+        </template>
         <input
           :name="`${rkey}prop_`+pindex"
           v-model="currentValue"
@@ -157,9 +168,9 @@
           >{{opt.key}}</option>
         </select>
       </div>
-      <!--<div v-if="prop.options && prop.options['selectionAccessor']==='RUNDECK_JOB'" class="col-sm-5">-->
-      <!--<job-config-picker v-model="currentValue"></job-config-picker>-->
-      <!--</div>-->
+      <div v-if="prop.options && prop.options['selectionAccessor']==='RUNDECK_JOB'" class="col-sm-5">
+        <job-config-picker v-model="currentValue"></job-config-picker>
+      </div>
       <slot
         v-else-if="prop.options && prop.options['selectionAccessor'] "
         name="accessors"
@@ -181,10 +192,13 @@
 <script lang="ts">
 import Vue from "vue"
 
+import JobConfigPicker from './JobConfigPicker.vue'
 import AceEditor from '../utils/AceEditor.vue'
+import { client } from '../../modules/rundeckClient'
 export default Vue.extend({
   components:{
     AceEditor,
+    JobConfigPicker
   },
   props:[
     'prop',
@@ -200,23 +214,37 @@ export default Vue.extend({
         return 'col-sm-5'
       }
       return 'col-sm-10'
+    },
+    setJobName(jobUuid: string) {
+      if((jobUuid && jobUuid.length > 0) && (this.prop.options && this.prop.options['displayType']==='RUNDECK_JOB')) {
+        client.jobInfoGet(jobUuid).then(response => {
+          if(response.name) {
+            var output = ''
+            if(response.group) output += response.group+"/"
+            output += response.name + " ("+response.project+")"
+            this.jobName = output
+          }
+        })
+      }
     }
   },
   data(){
     return{
-      currentValue: this.value
+      currentValue: this.value,
+      jobName: ''
     }
   },
   watch:{
     currentValue:function(newval){
       this.$emit('input',newval)
+      this.setJobName(newval)
     },
     value:function(newval){
       this.currentValue = newval
     }
   },
   mounted(){
-
+    this.setJobName(this.value)
   }
 })
 </script>
