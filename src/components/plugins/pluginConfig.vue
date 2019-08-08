@@ -302,7 +302,7 @@ export default Vue.extend({
     isCreateMode(): boolean {
       return this.mode === 'create'
     },
-    isShowConfigForm () {
+    isShowConfigForm (): boolean {
       return this.isEditMode || this.isCreateMode
     },
     isShowMode(): boolean {
