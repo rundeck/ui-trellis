@@ -9,12 +9,17 @@
     </span>
     <span :class="titleCss" v-if="showTitle">{{title}}</span>
     <span :class="descriptionCss" v-if="showDescription">{{shortDescription}}</span>
-    <span :class="extendedCss" v-if="showExtended && extraDescription">
-      <span @click="toggleExtended=!toggleExtended">More...</span>
-      <span v-if="toggleExtended">
-        {{extraDescription}}
-      </span>
-    </span>
+    <details class="more-info details-reset" :class="extendedCss" v-if="inputShowDescription && showExtended && extraDescription">
+        <summary>
+            More...
+            <span class="more-indicator-verbiage more-info-icon"><i class="glyphicon glyphicon-chevron-right"/></span>
+            <span class="less-indicator-verbiage more-info-icon"><i class="glyphicon glyphicon-chevron-down"/></span>
+        </summary>
+
+    {{extraDescription}}
+
+    </details>
+
     <slot name="suffix"></slot>
   </span>
 </template>
