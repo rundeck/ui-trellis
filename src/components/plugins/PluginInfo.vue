@@ -5,6 +5,7 @@
       <img :src="iconUrl" v-if="iconUrl" width="16px" height="16px">
       <i :class="'glyphicon glyphicon-'+glyphicon" v-else-if="glyphicon"></i>
       <i :class="'fas fa-'+faicon" v-else-if="faicon"></i>
+      <i :class="'fab fa-'+fabicon" v-else-if="fabicon"></i>
       <i class="rdicon icon-small plugin" v-else></i>
     </span>
     <span :class="titleCss" v-if="showTitle">{{title}}</span>
