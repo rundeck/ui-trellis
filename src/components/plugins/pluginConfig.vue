@@ -69,10 +69,10 @@
             <details :open="!group.secondary" v-else class="more-info details-reset">
               <summary >
                 <span class="row">
-                  <span class="col-sm-12 h4 header-reset">
+                  <span class="col-sm-2 control-label h5 header-reset">
                 {{group.name!=='-' ? group.name :"More"}}
-                  <i class="more-indicator-verbiage glyphicon glyphicon-chevron-right"></i>
-                  <i class="less-indicator-verbiage glyphicon glyphicon-chevron-down"></i>
+                  <i class="more-indicator-verbiage more-info-icon glyphicon glyphicon-chevron-right"></i>
+                  <i class="less-indicator-verbiage more-info-icon glyphicon glyphicon-chevron-down"></i>
                   </span>
                 </span>
               </summary>
