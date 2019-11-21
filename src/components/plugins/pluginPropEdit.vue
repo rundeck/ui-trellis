@@ -7,7 +7,8 @@
             type="checkbox"
             :name="`${rkey}prop_`+pindex"
             :id="`${rkey}prop_`+pindex"
-            value="true"
+            true-value="true"
+            false-value="false"
             v-model="currentValue"
           >
           <label :for="`${rkey}prop_`+pindex">{{prop.title}}</label>
