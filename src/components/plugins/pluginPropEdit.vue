@@ -1,18 +1,45 @@
 <template>
   <div>
     <template v-if="prop.type==='Boolean'">
-      <div class="col-xs-10 col-xs-offset-2">
-        <div class="checkbox">
+      <div class="col-xs-10 col-xs-offset-2" v-if="prop.defaultValue!=='true'">
+        <div class="checkbox" >
           <input
             type="checkbox"
             :name="`${rkey}prop_`+pindex"
             :id="`${rkey}prop_`+pindex"
-            true-value="true"
-            false-value="false"
+            value="true"
             v-model="currentValue"
           >
           <label :for="`${rkey}prop_`+pindex">{{prop.title}}</label>
         </div>
+
+      </div>
+      <label
+        :class="'col-sm-2 control-label input-sm '+(prop.required ? 'required' : '')"
+        :for="`${rkey}prop_`+pindex"
+        v-if="prop.defaultValue==='true'"
+      >{{prop.title}}</label>
+      <div class="col-xs-10" v-if="prop.defaultValue==='true'">
+          <label :for="`${rkey}prop_true_`+pindex" class="radio-inline">
+          <input
+            type="radio"
+            :name="`${rkey}prop_`+pindex"
+            :id="`${rkey}prop_true_`+pindex"
+            value="true"
+            v-model="currentValue"
+          >
+            {{prop.options&&prop.options['booleanTrueDisplayValue']?prop.options['booleanTrueDisplayValue']:$t('true')}}
+          </label>
+          <label :for="`${rkey}prop_false_`+pindex" class="radio-inline">
+          <input
+            type="radio"
+            :name="`${rkey}prop_`+pindex"
+            :id="`${rkey}prop_false_`+pindex"
+            value="false"
+            v-model="currentValue"
+          >
+            {{prop.options&&prop.options['booleanFalseDisplayValue']?prop.options['booleanFalseDisplayValue']:$t('false')}}
+          </label>
       </div>
     </template>
     <template v-else>

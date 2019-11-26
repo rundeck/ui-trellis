@@ -49,7 +49,7 @@
         </span>
         <span v-for="prop in props" :key="prop.name" class="configprop">
 
-            <plugin-prop-view :prop="prop" :value="config[prop.name]"  v-if="config[prop.name]"/>
+            <plugin-prop-view :prop="prop" :value="config[prop.name]"  v-if="prop.type === 'Boolean' || config[prop.name]"/>
 
         </span>
       </div>
@@ -217,6 +217,9 @@ export default Vue.extend({
         if (prop.type === 'Boolean') {
           if(this.inputValues[prop.name]===true||this.inputValues[prop.name]==='true'){
             values[prop.name]='true'
+          }else if(prop.defaultValue==='true'){
+            //explicit value set if the default would be true
+            values[prop.name]='false'
           }
         }else{
           values[prop.name]=this.inputValues[prop.name]
