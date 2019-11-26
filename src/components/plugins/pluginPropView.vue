@@ -1,9 +1,14 @@
 <template>
   <span>
       <span class="configpair" v-if="prop.type==='Boolean'">
-        <template v-if="value==='true' ||value===true">
-          <span :title="prop.desc">{{prop.title}}:</span>
-          <span :class="prop.options && prop.options['booleanTrueDisplayValueClass']||'text-success'">yes</span>
+        <template v-if="value==='true' ||value===true || prop.defaultValue==='true' && (value==='false'||value===false)">
+          <span :title="prop.desc">{{prop.title}}: </span>
+          <span :class="prop.options && prop.options['booleanTrueDisplayValueClass']||'text-success'" v-if="value==='true'||value===true">
+            {{prop.options&&prop.options['booleanTrueDisplayValue']?prop.options['booleanTrueDisplayValue']:$t('yes')}}
+          </span>
+          <span :class="prop.options && prop.options['booleanFalseDisplayValueClass']||'text-success'" v-if="value==='false'||value===false">
+            {{prop.options&&prop.options['booleanFalseDisplayValue']?prop.options['booleanFalseDisplayValue']:$t('no')}}
+          </span>
         </template>
       </span>
       <span class="configpair" v-else-if="prop.type==='Integer'">

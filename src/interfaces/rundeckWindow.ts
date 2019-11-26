@@ -1,6 +1,8 @@
 import {RundeckBrowser} from 'ts-rundeck'
+import Vue from 'vue'
 
 export interface RundeckContext {
+    eventBus: Vue
     rdBase: string
     apiVersion: string
     projectName: string

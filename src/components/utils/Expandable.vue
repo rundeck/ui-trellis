@@ -3,8 +3,8 @@
       <summary  :class="linkCss">
         <slot name="link" :open="open">
           <slot name="label">More...</slot>
-          <span class="more-indicator-verbiage"><slot name="more"><i class="glyphicon glyphicon-chevron-right"></i></slot></span>
-          <span class="less-indicator-verbiage"><slot name="less"><i class="glyphicon glyphicon-chevron-down"></i></slot></span>
+          <span class="more-indicator-verbiage more-info-icon"><slot name="more"><i class="glyphicon glyphicon-chevron-right"></i></slot></span>
+          <span class="less-indicator-verbiage more-info-icon"><slot name="less"><i class="glyphicon glyphicon-chevron-down"></i></slot></span>
         </slot>
       </summary>
 

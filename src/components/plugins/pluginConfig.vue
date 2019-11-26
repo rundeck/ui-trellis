@@ -49,7 +49,7 @@
         </span>
         <span v-for="prop in props" :key="prop.name" class="configprop">
 
-            <plugin-prop-view :prop="prop" :value="config[prop.name]"  v-if="config[prop.name]"/>
+            <plugin-prop-view :prop="prop" :value="config[prop.name]"  v-if="prop.type === 'Boolean' || config[prop.name]"/>
 
         </span>
       </div>
@@ -69,10 +69,10 @@
             <details :open="!group.secondary" v-else class="more-info details-reset">
               <summary >
                 <span class="row">
-                  <span class="col-sm-12 h4 header-reset">
+                  <span class="col-sm-2 control-label h5 header-reset">
                 {{group.name!=='-' ? group.name :"More"}}
-                  <i class="more-indicator-verbiage glyphicon glyphicon-chevron-right"></i>
-                  <i class="less-indicator-verbiage glyphicon glyphicon-chevron-down"></i>
+                  <i class="more-indicator-verbiage more-info-icon glyphicon glyphicon-chevron-right"></i>
+                  <i class="less-indicator-verbiage more-info-icon glyphicon glyphicon-chevron-down"></i>
                   </span>
                 </span>
               </summary>
@@ -217,6 +217,9 @@ export default Vue.extend({
         if (prop.type === 'Boolean') {
           if(this.inputValues[prop.name]===true||this.inputValues[prop.name]==='true'){
             values[prop.name]='true'
+          }else if(prop.defaultValue==='true'){
+            //explicit value set if the default would be true
+            values[prop.name]='false'
           }
         }else{
           values[prop.name]=this.inputValues[prop.name]

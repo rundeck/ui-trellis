@@ -5,16 +5,22 @@
       <img :src="iconUrl" v-if="iconUrl" width="16px" height="16px">
       <i :class="'glyphicon glyphicon-'+glyphicon" v-else-if="glyphicon"></i>
       <i :class="'fas fa-'+faicon" v-else-if="faicon"></i>
+      <i :class="'fab fa-'+fabicon" v-else-if="fabicon"></i>
       <i class="rdicon icon-small plugin" v-else></i>
     </span>
     <span :class="titleCss" v-if="showTitle">{{title}}</span>
     <span :class="descriptionCss" v-if="showDescription">{{shortDescription}}</span>
-    <span :class="extendedCss" v-if="showExtended && extraDescription">
-      <span @click="toggleExtended=!toggleExtended">More...</span>
-      <span v-if="toggleExtended">
-        {{extraDescription}}
-      </span>
-    </span>
+    <details class="more-info details-reset" :class="extendedCss" v-if="inputShowDescription && showExtended && extraDescription">
+        <summary>
+            More...
+            <span class="more-indicator-verbiage more-info-icon"><i class="glyphicon glyphicon-chevron-right"/></span>
+            <span class="less-indicator-verbiage more-info-icon"><i class="glyphicon glyphicon-chevron-down"/></span>
+        </summary>
+
+    {{extraDescription}}
+
+    </details>
+
     <slot name="suffix"></slot>
   </span>
 </template>
