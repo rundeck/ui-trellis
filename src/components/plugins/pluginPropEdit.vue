@@ -199,6 +199,9 @@
       <div v-if="prop.options && prop.options['selectionAccessor']==='RUNDECK_JOB'" class="col-sm-5">
         <job-config-picker v-model="currentValue"></job-config-picker>
       </div>
+      <div v-if="prop.options && prop.options['selectionAccessor']==='NODE_FILTER'" class="col-sm-5">
+        <node-filter-picker v-model="currentValue" :selection-component="prop.options['selectionComponent']"></node-filter-picker>
+      </div>
       <slot
         v-else-if="prop.options && prop.options['selectionAccessor'] "
         name="accessors"
@@ -221,12 +224,14 @@
 import Vue from "vue"
 
 import JobConfigPicker from './JobConfigPicker.vue'
+import NodeFilterPicker from './NodeFilterPicker.vue'
 import AceEditor from '../utils/AceEditor.vue'
 import { client } from '../../modules/rundeckClient'
 export default Vue.extend({
   components:{
     AceEditor,
-    JobConfigPicker
+    JobConfigPicker,
+    NodeFilterPicker
   },
   props:[
     'prop',

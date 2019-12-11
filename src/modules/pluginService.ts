@@ -19,17 +19,16 @@ import {client} from './rundeckClient'
 const ServicesCache : { [svc: string]: { [provider: string]: any } }= {}
 const ServiceProvidersCache: { [provider: string]: any } = {}
 
-const getParameters = () :Promise<{[key:string]:string}>=> {
-  return new Promise((resolve, reject) => {
-    if (window._rundeck && window._rundeck.rdBase && window._rundeck.apiVersion) {
-      resolve({
-        apiBase: `${window._rundeck.rdBase}/api/${window._rundeck.apiVersion}`,
-        rdBase: window._rundeck.rdBase
-      })
-    } else {
-      reject(new Error('No rdBase found'))
+export const getParameters = async () : Promise<{[key:string]:string}> => {
+  if (window._rundeck && window._rundeck.rdBase && window._rundeck.apiVersion) {
+    return {
+      apiBase: `${window._rundeck.rdBase}/api/${window._rundeck.apiVersion}`,
+      rdBase: window._rundeck.rdBase,
+      apiVersion:window._rundeck.apiVersion
     }
-  })
+  } else {
+    throw new Error('No rdBase found')
+  }
 }
 export const getPluginProvidersForService = async (svcName:string) => {
   if (ServicesCache[svcName]) {
@@ -106,5 +105,6 @@ export const validatePluginConfig = async (svcName:string, provider:string, conf
 export default {
   getPluginProvidersForService,
   getServiceProviderDescription,
-  validatePluginConfig
+  validatePluginConfig,
+  getParameters
 }
