@@ -15,9 +15,9 @@
   -->
 
 <template>
-    <div class="keySelector">
+    <div>
 
-        <btn class="btn btn-sm btn-default obs-select-storage-path" @click="openSelector()">
+        <btn class="btn btn-sm btn-default" @click="openSelector()">
             <slot>Select… <i class="glyphicon glyphicon-folder-open"></i></slot>
         </btn>
 
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row keySelector">
                 <div class="col-sm-12">
                     <div style="margin-bottom:1em;">
                         <button type="button" class="btn btn-sm btn-default"
@@ -113,8 +113,8 @@
                             </td>
                         </tr>
                         </tbody>
-                        <tbody v-for="directory in directories" :key="directory.name">
-                        <tr>
+                        <tbody>
+                        <tr v-for="directory in directories" :key="directory.name">
                             <td class="action" @click="loadDir(directory.path)" colspan="2">
                                 <i class="glyphicon glyphicon-arrow-down"></i>
                                 <i class="glyphicon glyphicon-folder-close"></i>
@@ -562,9 +562,14 @@
 </script>
 
 <style>
-    #storage-file{
-        padding: 3em;
-        margin: 0;
+    .keySelector span {
+        content: " ";
+        margin: 0 2px;
+    }
+
+    .keySelector i {
+        content: " ";
+        margin: 0 1px;
     }
 </style>
 
