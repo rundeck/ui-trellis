@@ -4,6 +4,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import {Component, Prop} from 'vue-property-decorator'
+
+@Component
 export default class PageConfirm extends Vue{
   confirmData:  string[] = []
 
@@ -16,21 +18,19 @@ export default class PageConfirm extends Vue{
   @Prop({required:true})
   display!:Boolean
 
-
-
   setConfirm(name:string){
     const loc=this.confirmData.indexOf(name)
     if(loc<0){
       this.confirmData.push(name)
     }
   }
+
   resetConfirm(name:string){
     const loc=this.confirmData.indexOf(name)
     if(loc>=0){
       this.confirmData.splice(loc,1)
     }
   }
-
 
   get needsConfirm():boolean {
     return this.confirmData.length>0
@@ -44,7 +44,6 @@ export default class PageConfirm extends Vue{
         return this.message||'confirm'
       }
     }
-
   }
 }
 </script>
