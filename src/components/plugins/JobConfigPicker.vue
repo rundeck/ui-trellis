@@ -16,7 +16,7 @@
 
 <template>
   <div>
-    <btn @click="modalOpen=true">
+    <btn @click="modalOpen=true" :class="btnClass" :size="btnSize" :type="btnType">
       <slot>Choose A Job &hellip;</slot>
     </btn>
 
@@ -72,6 +72,12 @@ export default class JobConfigPicker extends Vue {
   value!: string
   @Prop({ required: false, default: '' })
   size!: string
+  @Prop({ required: false, default: "" })
+  btnType!: string
+  @Prop({ required: false, default: "" })
+  btnSize!: string
+  @Prop({ required: false, default: "" })
+  btnClass!: string
 
   selectedJob: JobReference | null = null
   modalOpen: boolean = false
