@@ -20,7 +20,7 @@
       <slot>Choose A Job &hellip;</slot>
     </btn>
 
-    <modal v-model="modalOpen" :title="'Choose A Job'" ref="modal" append-to-body>
+    <modal v-model="modalOpen" :title="'Choose A Job'" ref="modal" append-to-body :size="size">
 
       <div v-if="showProjectSelector"><label>Project:</label><project-picker v-model="project"></project-picker></div>
 
@@ -70,6 +70,8 @@ Vue.component("project-picker",ProjectPicker)
 export default class JobConfigPicker extends Vue {
   @Prop({ required: false, default: '' })
   value!: string
+  @Prop({ required: false, default: '' })
+  size!: string
 
   selectedJob: JobReference | null = null
   modalOpen: boolean = false
