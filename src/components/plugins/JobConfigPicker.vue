@@ -24,6 +24,10 @@
 
       <div v-if="showProjectSelector"><label>Project:</label><project-picker v-model="project"></project-picker></div>
 
+      <div v-if="showScheduledToggle" class="checkbox">
+        <input type="checkbox" v-model="scheduledFilter" id="_job_config_picker_scheduled_filter">
+        <label for="_job_config_picker_scheduled_filter">Show Scheduled Jobs Only</label>
+      </div>
       <div class="list-group" v-for="(item,name) in jobTree.groups" :key="'group'+name">
         <div class="list-group-item" v-if="name && item.jobs.length>0">
            <h4 class="list-group-item-heading">{{item.label}}</h4>
@@ -40,10 +44,12 @@
              </a>
 
 
-            <span class="text-primary">
+            <span class="text-secondary">
               {{job.description}}
             </span>
-
+            <span class="text-muted" v-if="job.scheduled">
+              <i class="glyphicon glyphicon-time"></i>
+            </span>
 
         </div>
       </div>
@@ -78,6 +84,10 @@ export default class JobConfigPicker extends Vue {
   btnSize!: string
   @Prop({ required: false, default: "" })
   btnClass!: string
+  @Prop({required:false,default:true})
+  showScheduledToggle!:boolean
+  @Prop({required:false,default:false})
+  showScheduledDefault!:boolean
 
   selectedJob: JobReference | null = null
   modalOpen: boolean = false
@@ -85,13 +95,19 @@ export default class JobConfigPicker extends Vue {
   jobTree: JobTree = new JobTree()
   project: string = ''
   showProjectSelector: boolean = true
+  scheduledFilter: boolean = this.showScheduledDefault
 
 @Watch('project')
+@Watch('scheduledFilter')
   loadJobs() {
-    this.jobTree = new JobTree()
     if(this.project != '') {
-      client.jobList(this.project).then(result => {
-        this.jobs = result
+      let params:{[name: string ] : any} = {}
+
+      params['scheduledFilter']=(this.scheduledFilter)
+
+      client.jobList(this.project,params ).then(result => {
+        this.$set(this,'jobTree', new JobTree())
+        this.$set(this,'jobs', result)
         this.jobs.forEach(job => this.jobTree.insert(job))
       })
     }
