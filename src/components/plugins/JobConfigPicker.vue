@@ -24,9 +24,14 @@
 
       <div v-if="showProjectSelector"><label>Project:</label><project-picker v-model="project"></project-picker></div>
 
-      <div v-if="showScheduledToggle" class="checkbox">
-        <input type="checkbox" v-model="scheduledFilter" id="_job_config_picker_scheduled_filter">
-        <label for="_job_config_picker_scheduled_filter">Show Scheduled Jobs Only</label>
+      <div v-if="showScheduledToggle" class="form-group">
+
+        <select v-model="filterType" id="_job_config_picker_scheduled_filter" class="form-control">
+          <option value="">All Jobs</option>
+          <option value="scheduled">Scheduled Jobs</option>
+          <option value="notscheduled">Non-Scheduled Jobs</option>
+        </select>
+
       </div>
       <div class="list-group" v-for="(item,name) in jobTree.groups" :key="'group'+name">
         <div class="list-group-item" v-if="name && item.jobs.length>0">
@@ -95,15 +100,17 @@ export default class JobConfigPicker extends Vue {
   jobTree: JobTree = new JobTree()
   project: string = ''
   showProjectSelector: boolean = true
-  scheduledFilter: boolean = this.showScheduledDefault
+  filterType: string = this.showScheduledDefault?'scheduled':''
 
 @Watch('project')
-@Watch('scheduledFilter')
+@Watch('filterType')
   loadJobs() {
     if(this.project != '') {
       let params:{[name: string ] : any} = {}
 
-      params['scheduledFilter']=(this.scheduledFilter)
+      if(this.filterType!=''){
+        params['scheduledFilter']=(this.filterType==='scheduled')
+      }
 
       client.jobList(this.project,params ).then(result => {
         this.$set(this,'jobTree', new JobTree())
