@@ -16,14 +16,23 @@
 
 <template>
   <div>
-    <btn @click="modalOpen=true">
+    <btn @click="modalOpen=true" :class="btnClass" :size="btnSize" :type="btnType">
       <slot>Choose A Job &hellip;</slot>
     </btn>
 
-    <modal v-model="modalOpen" :title="'Choose A Job'" ref="modal" append-to-body>
+    <modal v-model="modalOpen" :title="'Choose A Job'" ref="modal" append-to-body :size="size">
 
       <div v-if="showProjectSelector"><label>Project:</label><project-picker v-model="project"></project-picker></div>
 
+      <div v-if="showScheduledToggle" class="form-group">
+
+        <select v-model="filterType" id="_job_config_picker_scheduled_filter" class="form-control">
+          <option value="">All Jobs</option>
+          <option value="scheduled">Scheduled Jobs</option>
+          <option value="notscheduled">Non-Scheduled Jobs</option>
+        </select>
+
+      </div>
       <div class="list-group" v-for="(item,name) in jobTree.groups" :key="'group'+name">
         <div class="list-group-item" v-if="name && item.jobs.length>0">
            <h4 class="list-group-item-heading">{{item.label}}</h4>
@@ -40,10 +49,12 @@
              </a>
 
 
-            <span class="text-primary">
+            <span class="text-secondary">
               {{job.description}}
             </span>
-
+            <span class="text-muted" v-if="job.scheduled">
+              <i class="glyphicon glyphicon-time"></i>
+            </span>
 
         </div>
       </div>
@@ -70,6 +81,18 @@ Vue.component("project-picker",ProjectPicker)
 export default class JobConfigPicker extends Vue {
   @Prop({ required: false, default: '' })
   value!: string
+  @Prop({ required: false, default: '' })
+  size!: string
+  @Prop({ required: false, default: "" })
+  btnType!: string
+  @Prop({ required: false, default: "" })
+  btnSize!: string
+  @Prop({ required: false, default: "" })
+  btnClass!: string
+  @Prop({required:false,default:true})
+  showScheduledToggle!:boolean
+  @Prop({required:false,default:false})
+  showScheduledDefault!:boolean
 
   selectedJob: JobReference | null = null
   modalOpen: boolean = false
@@ -77,13 +100,21 @@ export default class JobConfigPicker extends Vue {
   jobTree: JobTree = new JobTree()
   project: string = ''
   showProjectSelector: boolean = true
+  filterType: string = this.showScheduledDefault?'scheduled':''
 
 @Watch('project')
+@Watch('filterType')
   loadJobs() {
-    this.jobTree = new JobTree()
     if(this.project != '') {
-      client.jobList(this.project).then(result => {
-        this.jobs = result
+      let params:{[name: string ] : any} = {}
+
+      if(this.filterType!=''){
+        params['scheduledFilter']=(this.filterType==='scheduled')
+      }
+
+      client.jobList(this.project,params ).then(result => {
+        this.$set(this,'jobTree', new JobTree())
+        this.$set(this,'jobs', result)
         this.jobs.forEach(job => this.jobTree.insert(job))
       })
     }
