@@ -208,8 +208,18 @@
       ></slot>
     </template>
 
-    <div class="col-sm-10 col-sm-offset-2" v-if="prop.desc">
-      <div class="help-block">{{prop.desc}}</div>
+    <div class="col-sm-10 col-sm-offset-2 help-block" v-if="prop.desc">
+      <details class="more-info" :class="extendedCss" v-if="extraDescription">
+          <summary>
+              <span :class="descriptionCss" >{{shortDescription}}</span>
+              <span class="more-indicator-verbiage btn-link btn-xs">More &hellip; </span>
+              <span class="less-indicator-verbiage btn-link btn-xs">Less </span>
+          </summary>
+
+          <markdown-it-vue class="markdown-body" :content="extraDescription" />
+
+      </details>
+      <div class="help-block" v-else>{{prop.desc}}</div>
     </div>
     <div
       class="col-sm-10 col-sm-offset-2 text-warning"
@@ -219,6 +229,8 @@
 </template>
 <script lang="ts">
 import Vue from "vue"
+import MarkdownItVue from 'markdown-it-vue'
+// import 'markdown-it-vue/dist/markdown-it-vue.css'
 
 import JobConfigPicker from './JobConfigPicker.vue'
 import AceEditor from '../utils/AceEditor.vue'
@@ -226,16 +238,47 @@ import { client } from '../../modules/rundeckClient'
 export default Vue.extend({
   components:{
     AceEditor,
-    JobConfigPicker
+    JobConfigPicker,
+    MarkdownItVue
   },
-  props:[
-    'prop',
-    'value',
-    'inputValues',
-    'validation',
-    'rkey',
-    'pindex'
-  ],
+  props:{
+    'prop':{
+      type:Object,
+      required:true
+     },
+    'value':{
+      required:false,
+      default:''
+     },
+    'inputValues':{
+      type:Object,
+      required:false
+     },
+    'validation':{
+      type:Object,
+      required:false
+     },
+    'rkey':{
+      type:String,
+      required:false,
+      default:''
+     },
+    'pindex':{
+      type:Number,
+      required:false,
+      default:0
+     },
+    'descriptionCss':{
+        type:String,
+        default:'',
+        required:false
+    },
+    'extendedCss':{
+        type:String,
+        default:'',
+        required:false
+    },
+  },
   methods:{
     inputColSize(prop: any) {
       if (prop.options && prop.options['selectionAccessor']) {
@@ -269,6 +312,22 @@ export default Vue.extend({
     },
     value:function(newval){
       this.currentValue = newval
+    }
+  },
+  computed:{
+    shortDescription() :string{
+      const desc = this.prop.desc
+        if (desc && desc.indexOf("\n") > 0) {
+            return desc.substring(0, desc.indexOf("\n"));
+        }
+        return desc;
+    },
+    extraDescription() :string|null{
+      const desc = this.prop.desc
+        if (desc && desc.indexOf("\n") > 0) {
+            return desc.substring(desc.indexOf("\n") + 1);
+        }
+        return null;
     }
   },
   mounted(){
