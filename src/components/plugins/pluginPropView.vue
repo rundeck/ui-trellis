@@ -78,7 +78,7 @@ export default Vue.extend({
   },
   props:{
     value:{
-      type:String,required:true
+      required:true
     },
     prop:{
       type:Object,required:true
